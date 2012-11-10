@@ -1,0 +1,14 @@
+Here is the beginning of a project that aims to design a Pymol plugin to help 
+to serch tunnels and cavities in proteins.
+
+This requires the CGAL and ESBTL libraries and works with CGAL 4.0.2 and
+ESBTL 1.0-bata01.
+
+- http://graphics.stanford.edu/courses/cs368-00-spring/TA/manuals/CGAL
+/installation/Chapter_installation.html
+for CGAL
+- http://esbtl.sourceforge.net/download.html for ESBTL.
+
+To be able to compile directly put ESBTL in /opt or /usr/local/include or
+modify the CMakeList.txt in the build directory.
+

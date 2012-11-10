@@ -1,0 +1,6 @@
+/Debug
+/Release
+/build/CMakeCache.txt
+/build/Makefile
+/build/CMakeFiles/
+/build/cmake_install.cmake
