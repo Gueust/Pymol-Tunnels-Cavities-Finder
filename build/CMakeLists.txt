@@ -22,10 +22,14 @@ if ( CGAL_FOUND )
 
   include( CGAL_CreateSingleSourceCGALProgram )
 
-  include_directories (BEFORE	"../../include" 
-  								"/opt/ESBTL-1.0-beta01/include"
-								"/usr/local/lib")
-  create_single_source_cgal_program( "../src/TunnelsCavitiesFinder.cpp" )
+  include_directories (BEFORE	"/usr/local/include" 
+				"/opt/ESBTL-1.0-beta01/include"
+				"/usr/local/lib")
+  #file(GLOB sources "../src/*.cpp" "../src/*.ui")
+  #file(GLOB headers "../src/*.h")
+  #add_executable(TunnelsCavitiesFinder ${sources} ${headers})
+
+  create_single_source_cgal_program( "../src/TunnelsCavitiesFinder.cpp")
 
 else()
   
@@ -33,4 +37,3 @@ else()
     and will not be compiled.")
   
 endif()
-

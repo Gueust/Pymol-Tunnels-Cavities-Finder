@@ -1,5 +1,5 @@
 Here is the beginning of a project that aims to design a Pymol plugin to help 
-to serch tunnels and cavities in proteins.
+to search tunnels and cavities in proteins.
 
 This requires the CGAL and ESBTL libraries and works with CGAL 4.0.2 and
 ESBTL 1.0-bata01.
