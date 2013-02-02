@@ -29,13 +29,14 @@
 // used as well as that of the covered work.
 //
 //
-// Initial author(s)     :  Nico Kruithof (?)
+// Initial author(s)     :  Nico Kruithof
 // Additional author : Jean-Baptiste Lespiau
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Skin_surface_3.h>
 #include <CGAL/Polyhedron_3.h>
 #include <CGAL/mesh_skin_surface_3.h>
+#include <CGAL/subdivide_skin_surface_mesh_3.h>
 #include <CGAL/Skin_surface_polyhedral_items_3.h>
 #include <list>
 
@@ -49,26 +50,34 @@ typedef CGAL::Skin_surface_3<Traits>                        Skin_surface_3;
 typedef Skin_surface_3::FT                                  FT;
 typedef Skin_surface_3::Weighted_point                      Weighted_point;
 typedef Weighted_point::Point                               Bare_point;
-typedef CGAL::Polyhedron_3<K>                               Polyhedron;
+/**
+  * The use of CGAL::Skin_surface_polyhedral_items_3< Skin_surface_3 > in 
+  * the CGAL::Polyhedron is not necessary, but gives the subdivision a 
+  * significant speedup.
+  */
+typedef CGAL::Polyhedron_3<K,
+  CGAL::Skin_surface_polyhedral_items_3<Skin_surface_3> >   Polyhedron;
 
 #include <list>
 #include <fstream>
-#include "skin_surface_writer.h"
 #include "extract_balls_from_pdb.h"
+#include "cgo_writer.h"
 
 
 int main(int argc, char *argv[]) {
+
   const char *filename;
   if (argc == 2) {
     filename = argv[1];
   } else {
-    filename = "../data/1t7i.pdb";
+    filename = "../data/2LWG.pdb";
+   //filename = "../data/1t7i.pdb";
   }
   
  
   std::list<Weighted_point> l;
-  double                    shrinkfactor = 0.5;
-  //Container for molecular system
+  double shrinkfactor = 0.5;
+  // Container for molecular system
   std::vector<System> systems;
   
   // Retrieve input balls:
@@ -78,13 +87,28 @@ int main(int argc, char *argv[]) {
   std::cout << "Constructing skin surface..." <<std::endl;
   Skin_surface_3 skin_surface(l.begin(), l.end(), shrinkfactor);
 
+  Polyhedron p;
+
   // Extract mesh from the skin surface:
   std::cout << "Meshing skin surface..." <<std::endl;
-  Polyhedron p;
   CGAL::mesh_skin_surface_3(skin_surface, p);
 
+  /** This produces a terrible error. 
+   *  The library being not clear, I could not understand it.
+  // The coarse mesh is refined to obtain a better approximation
+  std::cout << "Refining the coarse mesh..." <<std::endl;
+  CGAL::subdivide_skin_surface_mesh_3(skin_surface, p);
+  */
+
+  // Output in OFF format
   std::ofstream out("mesh.off");
   out << p;
-
+  out.close();
+  
+  // Output that can be used in PyMol
+  std::ofstream cgo("cgo.py");
+  write_cgo(skin_surface,p, cgo);
+  cgo.close();
+  
   return 0;
 }

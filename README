@@ -1,6 +1,17 @@
 Here is the beginning of a project that aims to design a Pymol plugin to help 
 to search tunnels and cavities in proteins.
 
+
+-- Fast demonstration -- (If everything is installed, see Requirements)
+git clone https://github.com/Gueust/Pymol-Tunnels-Cavities-Finder.git
+cd build/ && cmake . && make 
+
+To see with geomview : geomview mesh.off
+to see with PyMol : pymol cgo.py
+
+
+-- Requirements --
+
 This requires the CGAL and ESBTL libraries and works with CGAL 4.0.2 and
 ESBTL 1.0-bata01.
 
