@@ -4,7 +4,7 @@ to search tunnels and cavities in proteins.
 
 -- Fast demonstration -- (If everything is installed, see Requirements)
 git clone https://github.com/Gueust/Pymol-Tunnels-Cavities-Finder.git
-cd build/ && cmake . && make 
+cd Pymol-Tunnels-Cavities-Finder/build/ && cmake . && make 
 
 To see with geomview : geomview mesh.off
 to see with PyMol : pymol cgo.py
