@@ -19,10 +19,10 @@ void print_normal(double x1, double y1, double z1,
 		  double x2, double y2, double z2,
 		  double x3, double y3, double z3, std::ostream &out) {
 
-  out << "NORMAL,"
-      << (y2-y1)*(z3-z2) - (z2-z1)*(y3-y2) << ", "
-      << (z2-z1)*(x3-x2) - (x2-x1)*(z3-z2) << ", "
-      << (x2-x1)*(y3-y2) - (y2-y1)*(x3-x2) << "," 
+  out << "NORMAL, "
+      << (y2-y1)*(z3-z1) - (z2-z1)*(y3-y1) << ", "
+      << (z2-z1)*(x3-x1) - (x2-x1)*(z3-z1) << ", "
+      << (x2-x1)*(y3-y1) - (y2-y1)*(x3-x1) << "," 
       << std::endl;
 }
 
@@ -63,48 +63,55 @@ void write_cgo(SkinSurface &skin,
     // We go to all the points of the polygon
     double x,y,z;
     bool first = true;
+    bool second = true;
     do {
       Vertex_handle vh = (*hc).vertex();
 
       if (first) {
-	Vector n = policy.normal(vh);
-	out << "NORMAL,"
-	    << n.x() << ", "
-	    << n.y() << ", "
-	    << n.z() << "," 
-	    << std::endl;
-	x = (*hc).vertex()->point().x();
-	y = (*hc).vertex()->point().y();
-	z = (*hc).vertex()->point().z();
-	first = false;
-	continue;
+	      first = false;
+	      continue;
+      } else if (second) {
+  	    x = (*hc).vertex()->point().x();
+	      y = (*hc).vertex()->point().y();
+	      z = (*hc).vertex()->point().z();
+        second = false;
+        continue;
       }
+	    
+      Vector n = policy.normal(vh);
+        
+
       /*
+      out << "NORMAL,"
+          << n.x() << ", "
+          << n.y() << ", "
+          << n.z() << "," 
+          << std::endl; */
       print_normal( (*hc_end).vertex()->point().x(),
-		    (*hc_end).vertex()->point().x(),
-		    (*hc_end).vertex()->point().x(),
+		    (*hc_end).vertex()->point().y(),
+		    (*hc_end).vertex()->point().z(),
 		    x, y, z, 
 		    (*hc).vertex()->point().x(),
 		    (*hc).vertex()->point().y(),
-		    (*hc).vertex()->point().z(), out); */
+		    (*hc).vertex()->point().z(), out);
       // Source of the triangle
       out << "  VERTEX, " 
-	  << (*hc_end).vertex()->point().x() << ", "
-	  << (*hc_end).vertex()->point().y() << ", " 
-	  << (*hc_end).vertex()->point().z() << ", "
-	  << std::endl;
+	        << (*hc_end).vertex()->point().x() << ", "
+	        << (*hc_end).vertex()->point().y() << ", " 
+	        << (*hc_end).vertex()->point().z() << ", "
+	        << std::endl;
       // Previous point
       out << "  VERTEX, " 
-	  << x  << ", "
-	  << y  << ", "
-	  << z  << ", "
-	  <<  std::endl;
+	        << x  << ", "
+	        << y  << ", "
+	        << z  << ", "
+	        <<  std::endl;
       // Current Point
       out << "  VERTEX, " 
-	  << (*hc).vertex()->point().x() << ", "
-	  << (*hc).vertex()->point().y() << ", "
-	  << (*hc).vertex()->point().z() << ", " 
-	  << std::endl <<  std::endl;
+          << (*hc).vertex()->point().x() << ", "
+          << (*hc).vertex()->point().y() << ", "
+          << (*hc).vertex()->point().z() << ", " 
+          << std::endl <<  std::endl;
       // We update the previous point coordinates
       x = (*hc).vertex()->point().x();
       y = (*hc).vertex()->point().y();
