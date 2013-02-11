@@ -28,7 +28,7 @@ void print_normal(double x1, double y1, double z1,
 
 
 template <class SkinSurface, class Polyhedron>
-void write_cgo(SkinSurface &skin,
+void write_cgo(
 				   Polyhedron &p,
 				   std::ostream &out)
 {
@@ -38,7 +38,7 @@ void write_cgo(SkinSurface &skin,
   typedef typename Polyhedron::Vertex_handle                    Vertex_handle;
   typedef typename Polyhedron::Traits::Vector_3                 Vector;
 
-  CGAL::Skin_surface_refinement_policy_3<SkinSurface, Polyhedron> policy(skin);
+  //CGAL::Skin_surface_refinement_policy_3<SkinSurface, Polyhedron> policy(skin);
 
   // Write header
   out << "from pymol import cmd" <<  std::endl
@@ -78,7 +78,7 @@ void write_cgo(SkinSurface &skin,
         continue;
       }
 	    
-      Vector n = policy.normal(vh);
+      //Vector n = policy.normal(vh);
         
 
       /*

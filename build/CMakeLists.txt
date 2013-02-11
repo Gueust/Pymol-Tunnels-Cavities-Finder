@@ -19,12 +19,13 @@ find_package(CGAL QUIET COMPONENTS Core )
 if ( CGAL_FOUND )
 
   include( ${CGAL_USE_FILE} )
-
+  include_directories (BEFORE "../CGAL-Fix")
   include( CGAL_CreateSingleSourceCGALProgram )
 
-  include_directories (BEFORE	"/usr/local/include" 
-				"/opt/ESBTL-1.0-beta01/include"
-				"/usr/local/lib")
+   
+  #include_directories (BEFORE	"/usr/local/include" 
+	#			"/opt/ESBTL-1.0-beta01/include"
+	#			"/usr/local/lib")
   #file(GLOB sources "../src/*.cpp" "../src/*.ui")
   #file(GLOB headers "../src/*.h")
   #add_executable(TunnelsCavitiesFinder ${sources} ${headers})

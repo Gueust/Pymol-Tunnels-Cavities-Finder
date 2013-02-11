@@ -37,19 +37,21 @@
 #include <CGAL/Polyhedron_3.h>
 #include <CGAL/mesh_skin_surface_3.h>
 #include <CGAL/subdivide_skin_surface_mesh_3.h>
-#include <CGAL/Skin_surface_polyhedral_items_3.h>
+//#include <CGAL/Skin_surface_polyhedral_items_3.h>
 #include <list>
 
 #include <ESBTL/CGAL/EPIC_kernel_with_atom.h>
 #include <ESBTL/default.h>
 
-typedef ESBTL::CGAL::EPIC_kernel_with_atom                  K;
-typedef ESBTL::CGAL::Default_system                         System;
-typedef CGAL::Skin_surface_traits_3<K>                      Traits;
-typedef CGAL::Skin_surface_3<Traits>                        Skin_surface_3;
-typedef Skin_surface_3::FT                                  FT;
-typedef Skin_surface_3::Weighted_point                      Weighted_point;
-typedef Weighted_point::Point                               Bare_point;
+typedef ESBTL::CGAL::EPIC_kernel_with_atom    K;
+typedef ESBTL::CGAL::Default_system           System;
+
+typedef CGAL::Exact_predicates_inexact_constructions_kernel K2;
+typedef CGAL::Skin_surface_traits_3<K>        Traits;
+typedef CGAL::Skin_surface_3<Traits>          Skin_surface_3;
+typedef Skin_surface_3::FT                    FT;
+typedef Skin_surface_3::Weighted_point        Weighted_point;
+typedef Weighted_point::Point                 Bare_point;
 /**
   * The use of CGAL::Skin_surface_polyhedral_items_3< Skin_surface_3 > in 
   * the CGAL::Polyhedron is not necessary, but gives the subdivision a 
@@ -63,6 +65,8 @@ typedef CGAL::Polyhedron_3<K,
 #include "extract_balls_from_pdb.h"
 #include "cgo_writer.h"
 
+// For making
+//#include <CGAL/make_skin_surface_mesh_3.h>
 
 int main(int argc, char *argv[]) {
 
@@ -82,23 +86,25 @@ int main(int argc, char *argv[]) {
   
   // Retrieve input balls:
   extract_balls_from_pdb<K>(filename,systems,std::back_inserter(l));
-  
+
+  /** Faster ?
+  Polyhedron p;
+  CGAL::make_skin_surface_mesh_3(p, l.begin(), l.end(), shrinkfactor);
+  **/
+
+  Polyhedron p;
   // Construct skin surface:
   std::cout << "Constructing skin surface..." <<std::endl;
   Skin_surface_3 skin_surface(l.begin(), l.end(), shrinkfactor);
-
-  Polyhedron p;
 
   // Extract mesh from the skin surface:
   std::cout << "Meshing skin surface..." <<std::endl;
   CGAL::mesh_skin_surface_3(skin_surface, p);
 
-  /** This produces a terrible error. 
-   *  The library being not clear, I could not understand it.
-  // The coarse mesh is refined to obtain a better approximation
+  /** The coarse mesh is refined to obtain a better approximation.
+     Each triangle is subdivided into 4 triangles. */
   std::cout << "Refining the coarse mesh..." <<std::endl;
   CGAL::subdivide_skin_surface_mesh_3(skin_surface, p);
-  */
 
   // Output in OFF format
   std::ofstream out("mesh.off");
@@ -107,7 +113,7 @@ int main(int argc, char *argv[]) {
   
   // Output that can be used in PyMol
   std::ofstream cgo("cgo.py");
-  write_cgo(skin_surface,p, cgo);
+  write_cgo<Skin_surface_3, Polyhedron>(p, cgo);
   cgo.close();
   
   return 0;
