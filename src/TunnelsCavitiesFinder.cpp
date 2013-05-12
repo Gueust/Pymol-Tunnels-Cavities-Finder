@@ -103,8 +103,8 @@ int main(int argc, char *argv[]) {
 
   /** The coarse mesh is refined to obtain a better approximation.
      Each triangle is subdivided into 4 triangles. */
-  std::cout << "Refining the coarse mesh..." <<std::endl;
-  CGAL::subdivide_skin_surface_mesh_3(skin_surface, p);
+  //std::cout << "Refining the coarse mesh..." <<std::endl;
+  //CGAL::subdivide_skin_surface_mesh_3(skin_surface, p);
 
   // Output in OFF format
   std::ofstream out("mesh.off");
