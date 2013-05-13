@@ -7,23 +7,26 @@ git clone https://github.com/Gueust/Pymol-Tunnels-Cavities-Finder.git
 cd Pymol-Tunnels-Cavities-Finder/build/ && cmake . && make && ./TunnelsCavitiesFinder
 
 To see with geomview : geomview mesh.off
-to see with PyMol : pymol cgo.py
+to see with PyMol : pymol cgo.py (require PyMol installed)
 
 
 -- Requirements --
 The compilation process uses CMake.
 
 The CGAL and ESBTL libraries are also required. 
-It has been tested with CGAL 4.1 and ESBTL 1.0-bata01 both of February 11, 2013
+It has been tested with CGAL 4.2 and ESBTL both in May, 2013
 
 - http://graphics.stanford.edu/courses/cs368-00-spring/TA/manuals/CGAL
 /installation/Chapter_installation.html
 for CGAL
 - ESBTL : "git clone git://esbtl.git.sourceforge.net/gitroot/esbtl/esbtl" 
-and then "sudo cp -r esbtl/ /usr/local/include/ESBTL"
+and then "sudo cp -r esbtl/include/ESBTL/ /usr/local/include/ESBTL"
 
-(The version at http://esbtl.sourceforge.net/download.html for ESBTL is not up-to-date)
+(The version at http://esbtl.sourceforge.net/download.html for ESBTL is NOT up-to-date)
 
 To be able to compile directly put ESBTL in /opt or /usr/local/include or
 modify the CMakeList.txt in the build directory.
+
+-- Acknowledgements--
+to Sebastien Loriot (GeometryFactory) : fixed a bug in ESBTL and CGAL
 
